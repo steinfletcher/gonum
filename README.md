@@ -33,7 +33,7 @@ type ColorEnum struct {
 
 ## Generated code
 
-This would yield the following generated code
+The consumer will install and run a binary to generated the code, e.g. `gonum -types=Color,Status`. This should support idempotent updates. This would yield the following generated code
 
 ```go
 // package private singleton instance holding metadata
@@ -97,6 +97,11 @@ func ColorNames() []string {
 The generated code would yield the following consumer api
 
 ```go
+type ColorEnum struct {
+	Red  string `enum:"RED"`
+	Blue string `enum:"BLUE"`
+}
+
 var a Color = Red
 
 var name string = a.Name() // "RED"
