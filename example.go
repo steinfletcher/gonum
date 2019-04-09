@@ -8,6 +8,6 @@ type ColorEnum struct {
 }
 
 type StatusEnum struct {
-	On  string `enum:"ON"`
-	Off string `enum:"OFF"`
+	On  string `enum:"-"`
+	Off string `enum:"-"`
 }

@@ -1,94 +1,32 @@
+**This is experimental. Please do not use.**
+
 # gonum
 
-## What's this repo about?
+`gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
-Go doesn't support powerful enum types that you find in other languages like Java. I am considering writing a code generator that will generate a powerful enum type.
+* Reference an compare enum instants using constant values
+* Provide a display value for the enumerated fields
+* Generate an enum instance from a string factory method
+* Generate a slice of display values
+* JSON marshalling and unmarshalling support
 
-I haven't thought this through in great detail, but here are my initial plans.
+## Example
 
-## Capabilities
+To define an enum, create a `struct` with the siffix `Enum`. You can define a display value in the `struct` tag. Adding a hyphen with assign a default name as the display value the same as the field name.
 
-It would be nice to have these capabilities:
-
-* Reference an enum instance statically, e.g. it should not be necessary to create an instance. This could be achieved with const values.
-
-* Support a display value. It's sometimes useful to have a human readable representation of the enum for display purposes.
-
-* Provide a factory method to create an enum value from a string
-
-* Provide a method to get all instances of the enum name as a slice of strings
-
-* Provide a method to get all instances of the enum value as a slice of the enum type
-
-## Design
-
-This might be an abuse of structs, but one approach would be to declare the enum as a struct. This is because metadata can be added through tags. I prefer this to recording metadata as comments (which is what https://github.com/abice/go-enum does). Using struct tags provide support for future extensions
+You can then generate the enum as follows.
 
 ```go
+//go:generate ./gonum -types=ColorEnum,StatusEnum
+
 type ColorEnum struct {
-	Red  string `enum:"name=RED"`
-	Blue string `enum:"name=BLUE"`
-}
-```
-
-## Generated code
-
-The consumer will install and run a binary to generated the code, e.g. `gonum -types=Color,Status`. This should support idempotent updates. This would yield the following generated code
-
-```go
-// package private singleton instance holding metadata
-var colorEnumInstance = ColorEnum{
-	Red:  "RED",
-	Blue: "BLUE",
+	Red  string `enum:"RED"`
+	Blue string `enum:"BLUE"`
 }
 
-type Color uint
-
-const (
-	Red = iota
-	Blue
-)
-
-func (g Color) Name() string {
-	switch g {
-	case Red:
-		return colorEnumInstance.Red
-	case Blue:
-		return colorEnumInstance.Blue
-	default:
-		panic(fmt.Sprintf("Could not map enum '%v'", g))
-	}
-}
-
-// String is an alias of Name to satisfy the Stringer interface
-func (g Color) String() string {
-	return g.Name()
-}
-
-
-func NewColor(name string) Color {
-	switch value {
-	case "RED":
-		return Red
-	case "BLUE":
-		return Blue
-	default:
-		panic(fmt.Sprintf("Could not create enum from name '%v'", value))
-	}
-}
-
-func ColorValues() []Color {
-	return []string{
-		Red,
-		Blue,
-	}
-}
-
-func ColorNames() []string {
-	return []string{
-		"RED",
-		"BLUE",
-	}
+type StatusEnum struct {
+	On  string `enum:"-"`
+	Off string `enum:"-"`
 }
 ```
 
@@ -96,19 +34,46 @@ func ColorNames() []string {
 
 The generated code would yield the following consumer api
 
+### Create an enum using a `const` value
+
 ```go
-type ColorEnum struct {
-	Red  string `enum:"RED"`
-	Blue string `enum:"BLUE"`
-}
-
 var a Color = Red
+```
 
+### Create an enum from a factory method
+
+```go
+var name Color = NewColor("RED")
+```
+
+### Get the display value
+
+```go
 var name string = a.Name() // "RED"
+```
 
-var color Color = NewColor("BLUE") // from string helper to create an enum
+### Get all display values
 
-var values []Color = ColorValues() // []string{Red, Blue}
-
+```go
 var names []string = ColorNames() // []string{"RED", "BLUE"}
+```
+
+### Get all values
+
+```go
+var values []Color = ColorValues() // []string{Red, Blue}
+```
+
+## Developing
+
+```bash
+go build gonum.go
+go generate
+go test .
+```
+
+OR
+
+```bash
+make test
 ```

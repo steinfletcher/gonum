@@ -2,6 +2,10 @@
 
 package main
 
+import "encoding/json"
+import "errors"
+import "fmt"
+
 var colorInstance = ColorEnum{
 	Red:  "RED",
 	Blue: "BLUE",
@@ -14,7 +18,18 @@ const (
 	Blue
 )
 
-func (g Color) Value() string {
+func NewColor(value string) (Color, error) {
+	switch value {
+	case "RED":
+		return Red, nil
+	case "BLUE":
+		return Blue, nil
+	default:
+		return 0, errors.New(fmt.Sprintf("'%s' is not a valid value for type", value))
+	}
+}
+
+func (g Color) Name() string {
 	switch g {
 	case Red:
 		return colorInstance.Red
@@ -25,27 +40,47 @@ func (g Color) Value() string {
 	}
 }
 
-func NewColor(value string) Color {
-	switch value {
-	case "RED":
-		return Red
-	case "BLUE":
-		return Blue
-	default:
-		panic("Could not create enum from value")
-	}
+func (g Color) String() string {
+	return g.Name()
 }
 
-func ColorValues() []string {
+func ColorNames() []string {
 	return []string{
 		"RED",
 		"BLUE",
 	}
 }
 
+func ColorValues() []Color {
+	return []Color{
+		Red,
+		Blue,
+	}
+}
+
+func (g Color) MarshalJSON() ([]byte, error) {
+	return json.Marshal(g.Name())
+}
+
+func (g *Color) UnmarshalJSON(b []byte) error {
+	var v string
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+
+	instance, createErr := NewColor(v)
+	if createErr != nil {
+		return createErr
+	}
+	g = &instance
+
+	return nil
+}
+
 var statusInstance = StatusEnum{
-	On:  "ON",
-	Off: "OFF",
+	On:  "On",
+	Off: "Off",
 }
 
 type Status uint
@@ -55,7 +90,18 @@ const (
 	Off
 )
 
-func (g Status) Value() string {
+func NewStatus(value string) (Status, error) {
+	switch value {
+	case "On":
+		return On, nil
+	case "Off":
+		return Off, nil
+	default:
+		return 0, errors.New(fmt.Sprintf("'%s' is not a valid value for type", value))
+	}
+}
+
+func (g Status) Name() string {
 	switch g {
 	case On:
 		return statusInstance.On
@@ -66,20 +112,40 @@ func (g Status) Value() string {
 	}
 }
 
-func NewStatus(value string) Status {
-	switch value {
-	case "ON":
-		return On
-	case "OFF":
-		return Off
-	default:
-		panic("Could not create enum from value")
+func (g Status) String() string {
+	return g.Name()
+}
+
+func StatusNames() []string {
+	return []string{
+		"On",
+		"Off",
 	}
 }
 
-func StatusValues() []string {
-	return []string{
-		"ON",
-		"OFF",
+func StatusValues() []Status {
+	return []Status{
+		On,
+		Off,
 	}
+}
+
+func (g Status) MarshalJSON() ([]byte, error) {
+	return json.Marshal(g.Name())
+}
+
+func (g *Status) UnmarshalJSON(b []byte) error {
+	var v string
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+
+	instance, createErr := NewStatus(v)
+	if createErr != nil {
+		return createErr
+	}
+	g = &instance
+
+	return nil
 }
