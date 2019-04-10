@@ -1,0 +1,13 @@
+builds:
+  - binary: gonum
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+
+release:
+  github:
+    owner: steinfletcher
+    name: gonum

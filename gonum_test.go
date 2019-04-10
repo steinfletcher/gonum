@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"reflect"
 	"testing"
 )
@@ -79,21 +80,38 @@ func TestJSONMarshal(t *testing.T) {
 }
 
 func TestUnmarshalJSON(t *testing.T) {
-	color := new(Color)
+	type A struct {
+		X string `json:"x"`
+		Y Color  `json:"y"`
+	}
+	data := []byte(`{"x":"x","y":"RED"}`)
 
-	err := color.UnmarshalJSON([]byte(`"BLUE"`))
-
+	a := new(A)
+	err := json.Unmarshal(data, a)
 	if err != nil {
 		t.Fail()
 	}
-	if *color != Blue {
-		t.Fatalf("expected 'BLUE' but got '%v'", color)
+
+	expected := A{X: "x", Y: Red}
+	if *a != expected {
+		t.Fatalf("expected x")
 	}
-	// assert we are not mutating the global instances
-	if Red.name != "RED" {
-		panic("mutation of name")
+}
+
+func TestUnmarshalJSON_Error(t *testing.T) {
+	type A struct {
+		X string `json:"x"`
+		Y Color  `json:"y"`
 	}
-	if Red.value != "Red" {
-		panic("mutation of value")
+	data := []byte(`{"x":"x","y":"NOT_A_COLOR"}`)
+
+	a := new(A)
+	err := json.Unmarshal(data, a)
+
+	if err == nil {
+		log.Fatal("expected an error")
+	}
+	if err.Error() != "'NOT_A_COLOR' is not a valid value for type" {
+		t.Fatalf("expected err: %v", err)
 	}
 }
