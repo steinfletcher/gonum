@@ -11,12 +11,13 @@ var colorInstance = ColorEnum{
 	Blue: "BLUE",
 }
 
-type Color uint
+type Color struct {
+	name  string
+	value string
+}
 
-const (
-	Red = iota
-	Blue
-)
+var Red = Color{name: "RED", value: "Red"}
+var Blue = Color{name: "BLUE", value: "Blue"}
 
 func NewColor(value string) (Color, error) {
 	switch value {
@@ -25,16 +26,17 @@ func NewColor(value string) (Color, error) {
 	case "BLUE":
 		return Blue, nil
 	default:
-		return 0, errors.New(fmt.Sprintf("'%s' is not a valid value for type", value))
+		return Color{}, errors.New(
+			fmt.Sprintf("'%s' is not a valid value for type", value))
 	}
 }
 
 func (g Color) Name() string {
 	switch g {
 	case Red:
-		return colorInstance.Red
+		return Red.name
 	case Blue:
-		return colorInstance.Blue
+		return Blue.name
 	default:
 		panic("Could not map enum")
 	}
@@ -73,7 +75,9 @@ func (g *Color) UnmarshalJSON(b []byte) error {
 	if createErr != nil {
 		return createErr
 	}
-	g = &instance
+
+	g.name = instance.name
+	g.value = instance.value
 
 	return nil
 }
@@ -83,12 +87,13 @@ var statusInstance = StatusEnum{
 	Off: "Off",
 }
 
-type Status uint
+type Status struct {
+	name  string
+	value string
+}
 
-const (
-	On = iota
-	Off
-)
+var On = Status{name: "On", value: "On"}
+var Off = Status{name: "Off", value: "Off"}
 
 func NewStatus(value string) (Status, error) {
 	switch value {
@@ -97,16 +102,17 @@ func NewStatus(value string) (Status, error) {
 	case "Off":
 		return Off, nil
 	default:
-		return 0, errors.New(fmt.Sprintf("'%s' is not a valid value for type", value))
+		return Status{}, errors.New(
+			fmt.Sprintf("'%s' is not a valid value for type", value))
 	}
 }
 
 func (g Status) Name() string {
 	switch g {
 	case On:
-		return statusInstance.On
+		return On.name
 	case Off:
-		return statusInstance.Off
+		return Off.name
 	default:
 		panic("Could not map enum")
 	}
@@ -145,7 +151,9 @@ func (g *Status) UnmarshalJSON(b []byte) error {
 	if createErr != nil {
 		return createErr
 	}
-	g = &instance
+
+	g.name = instance.name
+	g.value = instance.value
 
 	return nil
 }

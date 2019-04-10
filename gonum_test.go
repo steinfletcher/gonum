@@ -7,7 +7,7 @@ import (
 )
 
 func TestName(t *testing.T) {
-	var a Color = Red
+	var a = Red
 
 	name := a.Name()
 
@@ -44,23 +44,15 @@ func TestNames(t *testing.T) {
 }
 
 func TestEquality(t *testing.T) {
-	var r1 Color = Red
-	var r2 Color = Red
-	var g Color = Blue
+	var r1 = Red
+	var r2 = Red
+	var g = Blue
 
 	if r1 == g {
 		t.Fail()
 	}
 
 	if r1 != r2 {
-		t.Fail()
-	}
-}
-
-func TestSetsDefaultName(t *testing.T) {
-	var s Status = Off
-
-	if s.Name() != "Off" {
 		t.Fail()
 	}
 }
@@ -86,27 +78,6 @@ func TestJSONMarshal(t *testing.T) {
 	}
 }
 
-func TestJSONMarshalSupportWithDefaultName(t *testing.T) {
-	type A struct {
-		X string `json:"x"`
-		Y Status `json:"y"`
-	}
-
-	a := A{
-		X: "x",
-		Y: On,
-	}
-
-	bytes, err := json.Marshal(&a)
-	if err != nil {
-		t.Fail()
-	}
-
-	if string(bytes) != `{"x":"x","y":"On"}` {
-		t.Fail()
-	}
-}
-
 func TestUnmarshalJSON(t *testing.T) {
 	color := new(Color)
 
@@ -117,5 +88,12 @@ func TestUnmarshalJSON(t *testing.T) {
 	}
 	if *color != Blue {
 		t.Fatalf("expected 'BLUE' but got '%v'", color)
+	}
+	// assert we are not mutating the global instances
+	if Red.name != "RED" {
+		panic("mutation of name")
+	}
+	if Red.value != "Red" {
+		panic("mutation of value")
 	}
 }

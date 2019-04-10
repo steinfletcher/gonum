@@ -370,14 +370,14 @@ var {{.InstanceVariable}} = {{.OriginalType}}{
 {{- end}}
 }
 
-type {{.NewType}} uint
+type {{.NewType}} struct {
+	name  string
+	value string
+}
 
-const (
-	{{(index .Fields 0).Value}} = iota
-{{- range $i, $e := .Fields}}{{- if gt $i 0}}
-	{{$e.Value}}
-{{- end}}{{- end}}
-)
+{{- range $e := .Fields}}
+var {{.Value}} = {{$.NewType}}{name: "{{.Key}}", value: "{{.Value}}"}
+{{- end}}
 
 func New{{.NewType}}(value string) ({{.NewType}}, error) {
 	switch value {
@@ -386,7 +386,8 @@ func New{{.NewType}}(value string) ({{.NewType}}, error) {
 		return {{.Value}}, nil
 {{- end}}
 	default:
-		return 0, errors.New(fmt.Sprintf("'%s' is not a valid value for type", value))
+		return {{.NewType}}{}, errors.New(
+			fmt.Sprintf("'%s' is not a valid value for type", value))
 	}
 }
 
@@ -394,7 +395,7 @@ func (g {{.NewType}}) Name() string {
 	switch g {
 {{- range $e := .Fields}}
 	case {{$e.Value}}:
-		return {{$.InstanceVariable}}.{{$e.Value}}
+		return {{$e.Value}}.name
 {{- end}}
 	default:
 		panic("Could not map enum")
@@ -436,7 +437,9 @@ func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
 	if createErr != nil {
 		return createErr
 	}
-	g = &instance
+
+	g.name = instance.name
+	g.value = instance.value
 
 	return nil
 }
