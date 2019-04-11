@@ -51,7 +51,7 @@ func (g Color) String() string {
 	return g.Name()
 }
 
-// Names returns the displays values of all enum instances as a slice
+// ColorNames returns the displays values of all enum instances as a slice
 func ColorNames() []string {
 	return []string{
 		"RED",
@@ -59,7 +59,7 @@ func ColorNames() []string {
 	}
 }
 
-// Values returns all enum instances as a slice
+// ColorValues returns all enum instances as a slice
 func ColorValues() []Color {
 	return []Color{
 		Red,
@@ -72,7 +72,7 @@ func (g Color) MarshalJSON() ([]byte, error) {
 	return json.Marshal(g.Name())
 }
 
-// MarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
+// UnmarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
 func (g *Color) UnmarshalJSON(b []byte) error {
 	var v string
 	err := json.Unmarshal(b, &v)
@@ -136,7 +136,7 @@ func (g Status) String() string {
 	return g.Name()
 }
 
-// Names returns the displays values of all enum instances as a slice
+// StatusNames returns the displays values of all enum instances as a slice
 func StatusNames() []string {
 	return []string{
 		"On",
@@ -144,7 +144,7 @@ func StatusNames() []string {
 	}
 }
 
-// Values returns all enum instances as a slice
+// StatusValues returns all enum instances as a slice
 func StatusValues() []Status {
 	return []Status{
 		On,
@@ -157,7 +157,7 @@ func (g Status) MarshalJSON() ([]byte, error) {
 	return json.Marshal(g.Name())
 }
 
-// MarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
+// UnmarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
 func (g *Status) UnmarshalJSON(b []byte) error {
 	var v string
 	err := json.Unmarshal(b, &v)
