@@ -370,15 +370,18 @@ var {{.InstanceVariable}} = {{.OriginalType}}{
 {{- end}}
 }
 
+// {{.NewType}} is the enum that instances should be created from
 type {{.NewType}} struct {
 	name  string
 	value string
 }
 
+// Enum instances
 {{- range $e := .Fields}}
 var {{.Value}} = {{$.NewType}}{name: "{{.Key}}", value: "{{.Value}}"}
 {{- end}}
 
+// New{{.NewType}} generates a new {{.NewType}} from the given display value (name)
 func New{{.NewType}}(value string) ({{.NewType}}, error) {
 	switch value {
 {{- range $e := .Fields}}
@@ -391,6 +394,7 @@ func New{{.NewType}}(value string) ({{.NewType}}, error) {
 	}
 }
 
+// Name returns the enum display value
 func (g {{.NewType}}) Name() string {
 	switch g {
 {{- range $e := .Fields}}
@@ -402,10 +406,12 @@ func (g {{.NewType}}) Name() string {
 	}
 }
 
+// String returns the enum display value and is an alias of Name to implement the Stringer interface
 func (g {{.NewType}}) String() string {
 	return g.Name()
 }
 
+// Names returns the displays values of all enum instances as a slice
 func {{.NewType}}Names() []string {
 	return []string{
 	{{- range $e := .Fields}}
@@ -414,6 +420,7 @@ func {{.NewType}}Names() []string {
 	}
 }
 
+// Values returns all enum instances as a slice
 func {{.NewType}}Values() []{{.NewType}} {
 	return []{{.NewType}}{
 	{{- range $e := .Fields}}
@@ -422,10 +429,12 @@ func {{.NewType}}Values() []{{.NewType}} {
 	}
 }
 
+// MarshalJSON provides json marshalling support by implementing the Marshaler interface
 func (g {{.NewType}}) MarshalJSON() ([]byte, error) {
 	return json.Marshal(g.Name())
 }
 
+// MarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
 func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
 	var v string
 	err := json.Unmarshal(b, &v)
