@@ -411,7 +411,7 @@ func (g {{.NewType}}) String() string {
 	return g.Name()
 }
 
-// Names returns the displays values of all enum instances as a slice
+// {{.NewType}}Names returns the displays values of all enum instances as a slice
 func {{.NewType}}Names() []string {
 	return []string{
 	{{- range $e := .Fields}}
@@ -420,7 +420,7 @@ func {{.NewType}}Names() []string {
 	}
 }
 
-// Values returns all enum instances as a slice
+// {{.NewType}}Values returns all enum instances as a slice
 func {{.NewType}}Values() []{{.NewType}} {
 	return []{{.NewType}}{
 	{{- range $e := .Fields}}
@@ -434,7 +434,7 @@ func (g {{.NewType}}) MarshalJSON() ([]byte, error) {
 	return json.Marshal(g.Name())
 }
 
-// MarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
+// UnmarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
 func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
 	var v string
 	err := json.Unmarshal(b, &v)

@@ -1,5 +1,3 @@
-**This is experimental. Please do not use.**
-
 # gonum
 
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
