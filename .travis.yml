@@ -1,0 +1,17 @@
+language: go
+
+go:
+  - "1.11"
+  - "stable"
+
+branches:
+  only:
+    - master
+
+script:
+  - diff -u <(echo -n) <(gofmt -s -d ./)
+  - diff -u <(echo -n) <(go vet ./...)
+  - make test
+
+env:
+  - GO111MODULE=on
