@@ -2,15 +2,21 @@
 
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
-* Reference an compare enum instants using constant values
+* Reference an compare enums using values
 * Provide a display value for the enumerated fields
 * Generate an enum instance from a string factory method
 * Generate a slice of display values
 * JSON marshalling and unmarshalling support
 
+## Install
+
+```bash
+go get -u github.com/steinfletcher/gonum
+```
+
 ## Example
 
-To define an enum, create a `struct` with the siffix `Enum`. You can define a display value in the `struct` tag. Adding a hyphen with assign a default name as the display value the same as the field name.
+To define an enum, create a `struct` with the suffix `Enum`. You can define a display value in the `struct` tag. Adding a hyphen will assign the field name to the display value.
 
 You can then generate the enum as follows.
 
@@ -32,10 +38,10 @@ type StatusEnum struct {
 
 The generated code would yield the following consumer api
 
-### Create an enum using a `const` value
+### Create an enum value
 
 ```go
-var a Color = Red
+a := Red // OR var a Color = Red
 ```
 
 ### Create an enum from a factory method

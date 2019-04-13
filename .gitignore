@@ -1,3 +1,4 @@
 gonum
 .idea/
 /dist
+/bin
