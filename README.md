@@ -8,7 +8,8 @@
 * Provide a display value for the enumerated fields
 * Generate an enum instance from a string factory method
 * Generate a slice of display values
-* JSON marshalling and unmarshalling support
+* JSON support
+* Enum instances can be passed as errors since they implement `Error() string`
 
 ## Install
 
@@ -88,6 +89,14 @@ var names []string = ColorNames() // []string{"RED", "BLUE"}
 
 ```go
 var values []Color = ColorValues() // []string{Red, Blue}
+```
+
+### Pass as an error
+
+Enums implement `Error() string` which means they can be passed as errors.
+
+```go
+var a error = Red
 ```
 
 ## Developing
