@@ -110,9 +110,11 @@ func (g *Generator) generate(typeName string) {
 	for _, enum := range enums {
 		var fields []fieldModel
 		for _, field := range enum.elements {
+
 			fields = append(fields, fieldModel{
-				Key:   field.name,
-				Value: field.value,
+				Key:         field.name,
+				Value:       field.value,
+				Description: field.description,
 			})
 		}
 
@@ -165,14 +167,14 @@ func (f *File) genDecl(node ast.Node) bool {
 							}
 						}
 						if len(field.Names) > 0 {
-							tagName := parseEnumStructTag(field.Tag.Value)
-							name := tagName.name
+							name, description := parseEnumStructTag(field.Tag.Value)
 							if name == "-" {
 								name = field.Names[0].Name
 							}
 							e.elements = append(e.elements, enumElement{
-								value: field.Names[0].Name,
-								name:  name,
+								value:       field.Names[0].Name,
+								name:        name,
+								description: description,
 							})
 						}
 					}
@@ -187,16 +189,18 @@ func (f *File) genDecl(node ast.Node) bool {
 	return false
 }
 
-type tag struct {
-	name string
-}
-
-func parseEnumStructTag(content string) tag {
+func parseEnumStructTag(content string) (string, string) {
 	if value, ok := parseStructTag(content, "`enum"); ok {
-		return tag{name: value}
+		splits := strings.Split(value, ",")
+		name := splits[0]
+		var description string
+		if len(splits) > 1 {
+			description = splits[1]
+		}
+		return name, description
 	}
 	log.Fatal("enum struct tag did not contain name")
-	return tag{}
+	return "", ""
 }
 
 func parseStructTag(tag string, key string) (value string, ok bool) {
@@ -312,8 +316,9 @@ type enum struct {
 }
 
 type enumElement struct {
-	value string
-	name  string
+	value       string
+	name        string
+	description string
 }
 
 // format returns the gofmt-ed contents of the Generator's buffer.
@@ -359,11 +364,17 @@ type model struct {
 }
 
 type fieldModel struct {
-	Key   string
-	Value string
+	Key         string
+	Value       string
+	Description string
 }
 
 const instanceTemplate = `
+type {{.InstanceVariable}}JsonDescriptionModel struct {
+	Name string ` + "`json:" + `"name"` + "`" + `
+	Description string ` + "`json:" + `"description"` + "`" + `
+}
+
 var {{.InstanceVariable}} = {{.OriginalType}}{
 {{- range .Fields}}
     {{.Value}}: "{{.Key}}",
@@ -374,11 +385,12 @@ var {{.InstanceVariable}} = {{.OriginalType}}{
 type {{.NewType}} struct {
 	name  string
 	value string
+	description string
 }
 
 // Enum instances
 {{- range $e := .Fields}}
-var {{.Value}} = {{$.NewType}}{name: "{{.Key}}", value: "{{.Value}}"}
+var {{.Value}} = {{$.NewType}}{name: "{{.Key}}", value: "{{.Value}}", description: "{{.Description}}"}
 {{- end}}
 
 // New{{.NewType}} generates a new {{.NewType}} from the given display value (name)
@@ -411,6 +423,18 @@ func (g {{.NewType}}) String() string {
 	return g.Name()
 }
 
+// Description returns the enum description if present. If no description is defined an empty string is returned
+func (g {{.NewType}}) Description() string {
+switch g {
+{{- range $e := .Fields}}
+	case {{$e.Value}}:
+		return "{{$e.Description}}"
+{{- end}}
+	default:
+		panic("Could not map enum description")
+	}
+}
+
 // {{.NewType}}Names returns the displays values of all enum instances as a slice
 func {{.NewType}}Names() []string {
 	return []string{
@@ -429,12 +453,19 @@ func {{.NewType}}Values() []{{.NewType}} {
 	}
 }
 
-// MarshalJSON provides json marshalling support by implementing the Marshaler interface
+// MarshalJSON provides json serialization support by implementing the Marshaler interface
 func (g {{.NewType}}) MarshalJSON() ([]byte, error) {
+	if g.Description() != "" {
+		m := {{.InstanceVariable}}JsonDescriptionModel {
+			Name: g.Name(),
+			Description: g.Description(),
+		}
+		return json.Marshal(m)
+	}
 	return json.Marshal(g.Name())
 }
 
-// UnmarshalJSON provides json unmarshalling support by implementing the Unmarshaler interface
+// UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
 	var v string
 	err := json.Unmarshal(b, &v)

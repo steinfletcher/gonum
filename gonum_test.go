@@ -39,7 +39,7 @@ func TestNewColorFromValue_Failure(t *testing.T) {
 func TestNames(t *testing.T) {
 	values := ColorNames()
 
-	if !reflect.DeepEqual(values, []string{"RED", "BLUE"}) {
+	if !reflect.DeepEqual(values, []string{"RED", "LIGHT_BLUE"}) {
 		t.Fail()
 	}
 }
@@ -47,7 +47,7 @@ func TestNames(t *testing.T) {
 func TestEquality(t *testing.T) {
 	var r1 = Red
 	var r2 = Red
-	var g = Blue
+	var g = LightBlue
 
 	if r1 == g {
 		t.Fail()
@@ -113,5 +113,28 @@ func TestUnmarshalJSON_Error(t *testing.T) {
 	}
 	if err.Error() != "'NOT_A_COLOR' is not a valid value for type" {
 		t.Fatalf("expected err: %v", err)
+	}
+}
+
+func TestSupportsDescription(t *testing.T) {
+	e := Maki
+
+	if e.Description() != "Rice and filling wrapped in seaweed" {
+		t.Fatalf("expected description but got %s", e.Description())
+	}
+}
+
+func TestSupportsSerializationWithDescription(t *testing.T) {
+	e := Maki
+
+	bytes, err := e.MarshalJSON()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual := string(bytes)
+	expected := `{"name":"MAKI","description":"Rice and filling wrapped in seaweed"}`
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("incorrect json, \nexpected: %s\nreceived: %s", expected, actual)
 	}
 }

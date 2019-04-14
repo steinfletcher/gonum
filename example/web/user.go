@@ -50,4 +50,3 @@ func getUser() http.HandlerFunc {
 		return
 	}
 }
-

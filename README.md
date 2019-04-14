@@ -21,16 +21,36 @@ To define an enum, create a `struct` with the suffix `Enum`. You can define a di
 You can then generate the enum as follows.
 
 ```go
-//go:generate ./gonum -types=ColorEnum,StatusEnum
+//go:generate ./gonum -types=ColorEnum,StatusEnum,SushiEnum
 
+// generate an enum with display values. The display values are used for JSON serialization/deserialization
 type ColorEnum struct {
-	Red  string `enum:"RED"`
-	Blue string `enum:"BLUE"`
+	Red       string `enum:"RED"`
+	LightBlue string `enum:"LIGHT_BLUE"`
 }
 
+// generate an enum with default display values. The display values are set to the field names, e.g. `On` and `Off`
 type StatusEnum struct {
 	On  string `enum:"-"`
 	Off string `enum:"-"`
+}
+
+// generate an enum with display values and descriptions.
+type SushiEnum struct {
+	Maki    string `enum:"MAKI,Rice and filling wrapped in seaweed"`
+	Temaki  string `enum:"TEMAKI,Hand rolled into a cone shape"`
+	Sashimi string `enum:"SASHIMI,Fish or shellfish served alone without rice"`
+}
+```
+
+When a description is defined the json is serialized as follows (not yet implemented)
+
+```json
+{
+  "sushi": {
+    "name": "SASHIMI",
+    "description": "Fish or shellfish served alone without rice"
+  }
 }
 ```
 
