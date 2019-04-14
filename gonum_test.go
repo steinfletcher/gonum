@@ -146,4 +146,3 @@ func TestSupportsUsageAsError(t *testing.T) {
 		t.Fail()
 	}
 }
-
