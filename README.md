@@ -1,5 +1,7 @@
 # gonum
 
+[![Build Status](https://travis-ci.org/steinfletcher/gonum.svg?branch=master)](https://travis-ci.org/steinfletcher/gonum)
+
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
 * Reference an compare enums using values
@@ -21,7 +23,7 @@ To define an enum, create a `struct` with the suffix `Enum`. You can define a di
 You can then generate the enum as follows.
 
 ```go
-//go:generate ./gonum -types=ColorEnum,StatusEnum,SushiEnum
+//go:generate gonum -types=ColorEnum,StatusEnum,SushiEnum
 
 // generate an enum with display values. The display values are used for JSON serialization/deserialization
 type ColorEnum struct {

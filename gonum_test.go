@@ -138,3 +138,12 @@ func TestSupportsSerializationWithDescription(t *testing.T) {
 		t.Fatalf("incorrect json, \nexpected: %s\nreceived: %s", expected, actual)
 	}
 }
+
+func TestSupportsUsageAsError(t *testing.T) {
+	var e error = AccountLocked
+
+	if e.Error() != "ACCOUNT_LOCKED" {
+		t.Fail()
+	}
+}
+

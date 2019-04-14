@@ -423,6 +423,11 @@ func (g {{.NewType}}) String() string {
 	return g.Name()
 }
 
+// Error returns the enum name and implements the Error interface
+func (g {{.NewType}}) Error() string {
+	return g.Name()
+}
+
 // Description returns the enum description if present. If no description is defined an empty string is returned
 func (g {{.NewType}}) Description() string {
 switch g {
