@@ -13,6 +13,15 @@
 
 ## Install
 
+From a github release
+
+```bash
+curl https://raw.githubusercontent.com/steinfletcher/gonum/master/download.sh | sh
+mv gonum /usr/local/bin
+```
+
+OR
+
 ```bash
 go get -u github.com/steinfletcher/gonum
 ```
