@@ -17,7 +17,7 @@ From a github release
 
 ```bash
 curl https://raw.githubusercontent.com/steinfletcher/gonum/master/download.sh | sh
-mv gonum /usr/local/bin
+mv bin/gonum /usr/local/bin
 ```
 
 OR
