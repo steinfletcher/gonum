@@ -8,6 +8,7 @@ import (
 	"go/format"
 	"go/token"
 	"go/types"
+	"golang.org/x/tools/go/packages"
 	"io/ioutil"
 	"log"
 	"os"
@@ -16,17 +17,16 @@ import (
 	"strings"
 	"text/template"
 	"unicode"
-
-	"golang.org/x/tools/go/packages"
 )
 
 var (
+	version   string
 	typeNames = flag.String("types", "", "comma-separated list of type names")
 	output    = flag.String("output", "", "output file name; default <src dir>/enum.go")
 )
 
 func Usage() {
-	fmt.Fprintf(os.Stderr, "Usage of gonum:\n")
+	fmt.Fprintf(os.Stderr, "Usage of gonum (%s)", version)
 	fmt.Fprintf(os.Stderr, "\tgonum [flags] -types T [directory]\n")
 	fmt.Fprintf(os.Stderr, "\tgonum [flags] -types T files... # Must be a single package\n")
 	fmt.Fprintf(os.Stderr, "For more information, see:\n")
