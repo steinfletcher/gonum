@@ -4,7 +4,7 @@
 
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
-* Reference an compare enums using values
+* Reference and compare enums using values
 * Provide a display value for the enumerated fields
 * Generate an enum instance from a string factory method
 * Generate a slice of display values
