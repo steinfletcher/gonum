@@ -104,13 +104,21 @@ func (g Color) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *Color) UnmarshalJSON(b []byte) error {
-	var v string
+	var v interface{}
 	err := json.Unmarshal(b, &v)
 	if err != nil {
 		return err
 	}
 
-	instance, createErr := NewColor(v)
+	var value string
+	switch v.(type) {
+	case map[string]interface{}:
+		value = v.(map[string]interface{})["name"].(string)
+	case string:
+		value = v.(string)
+	}
+
+	instance, createErr := NewColor(value)
 	if createErr != nil {
 		return createErr
 	}
@@ -220,13 +228,21 @@ func (g Status) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *Status) UnmarshalJSON(b []byte) error {
-	var v string
+	var v interface{}
 	err := json.Unmarshal(b, &v)
 	if err != nil {
 		return err
 	}
 
-	instance, createErr := NewStatus(v)
+	var value string
+	switch v.(type) {
+	case map[string]interface{}:
+		value = v.(map[string]interface{})["name"].(string)
+	case string:
+		value = v.(string)
+	}
+
+	instance, createErr := NewStatus(value)
 	if createErr != nil {
 		return createErr
 	}
@@ -346,13 +362,21 @@ func (g Sushi) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *Sushi) UnmarshalJSON(b []byte) error {
-	var v string
+	var v interface{}
 	err := json.Unmarshal(b, &v)
 	if err != nil {
 		return err
 	}
 
-	instance, createErr := NewSushi(v)
+	var value string
+	switch v.(type) {
+	case map[string]interface{}:
+		value = v.(map[string]interface{})["name"].(string)
+	case string:
+		value = v.(string)
+	}
+
+	instance, createErr := NewSushi(value)
 	if createErr != nil {
 		return createErr
 	}
@@ -462,13 +486,21 @@ func (g Errors) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *Errors) UnmarshalJSON(b []byte) error {
-	var v string
+	var v interface{}
 	err := json.Unmarshal(b, &v)
 	if err != nil {
 		return err
 	}
 
-	instance, createErr := NewErrors(v)
+	var value string
+	switch v.(type) {
+	case map[string]interface{}:
+		value = v.(map[string]interface{})["name"].(string)
+	case string:
+		value = v.(string)
+	}
+
+	instance, createErr := NewErrors(value)
 	if createErr != nil {
 		return createErr
 	}

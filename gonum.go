@@ -473,13 +473,21 @@ func (g {{.NewType}}) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON provides json deserialization support by implementing the Unmarshaler interface
 func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
-	var v string
+	var v interface{}
 	err := json.Unmarshal(b, &v)
 	if err != nil {
 		return err
 	}
 
-	instance, createErr := New{{.NewType}}(v)
+	var value string
+	switch v.(type) {
+	case map[string]interface{}:
+		value = v.(map[string]interface{})["name"].(string)
+	case string:
+		value = v.(string)
+	}
+
+	instance, createErr := New{{.NewType}}(value)
 	if createErr != nil {
 		return createErr
 	}
