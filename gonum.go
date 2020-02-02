@@ -486,6 +486,7 @@ func (g *{{.NewType}}) UnmarshalJSON(b []byte) error {
 
 	g.name = instance.name
 	g.value = instance.value
+	g.description = instance.description
 
 	return nil
 }

@@ -139,6 +139,25 @@ func TestSupportsSerializationWithDescription(t *testing.T) {
 	}
 }
 
+func TestUnmarshalJSONWithDescription(t *testing.T) {
+	type A struct {
+		X string `json:"x"`
+		Y Sushi  `json:"y"`
+	}
+	data := []byte(`{"x":"x","y":"MAKI"}`)
+
+	a := new(A)
+	err := json.Unmarshal(data, a)
+	if err != nil {
+		t.Fail()
+	}
+
+	expected := A{X: "x", Y: Maki}
+	if *a != expected {
+		t.Fatalf("expected x")
+	}
+}
+
 func TestSupportsUsageAsError(t *testing.T) {
 	var e error = AccountLocked
 

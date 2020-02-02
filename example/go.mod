@@ -7,3 +7,5 @@ require (
 	github.com/steinfletcher/apitest v1.1.1
 	github.com/steinfletcher/apitest-jsonpath v1.0.2
 )
+
+go 1.13
