@@ -48,7 +48,7 @@ func (g Color) Name() string {
 	case LightBlue:
 		return LightBlue.name
 	default:
-		panic("Could not map enum")
+		return ""
 	}
 }
 
@@ -70,7 +70,7 @@ func (g Color) Description() string {
 	case LightBlue:
 		return ""
 	default:
-		panic("Could not map enum description")
+		return ""
 	}
 }
 
@@ -172,7 +172,7 @@ func (g Status) Name() string {
 	case Off:
 		return Off.name
 	default:
-		panic("Could not map enum")
+		return ""
 	}
 }
 
@@ -194,7 +194,7 @@ func (g Status) Description() string {
 	case Off:
 		return ""
 	default:
-		panic("Could not map enum description")
+		return ""
 	}
 }
 
@@ -302,7 +302,7 @@ func (g Sushi) Name() string {
 	case Sashimi:
 		return Sashimi.name
 	default:
-		panic("Could not map enum")
+		return ""
 	}
 }
 
@@ -326,7 +326,7 @@ func (g Sushi) Description() string {
 	case Sashimi:
 		return "Fish or shellfish served alone without rice"
 	default:
-		panic("Could not map enum description")
+		return ""
 	}
 }
 
@@ -430,7 +430,7 @@ func (g Errors) Name() string {
 	case AccountLocked:
 		return AccountLocked.name
 	default:
-		panic("Could not map enum")
+		return ""
 	}
 }
 
@@ -452,7 +452,7 @@ func (g Errors) Description() string {
 	case AccountLocked:
 		return "Your account has been locked. Contact support at me@admin.com"
 	default:
-		panic("Could not map enum description")
+		return ""
 	}
 }
 

@@ -415,7 +415,7 @@ func (g {{.NewType}}) Name() string {
 		return {{$e.Value}}.name
 {{- end}}
 	default:
-		panic("Could not map enum")
+		return ""
 	}
 }
 
@@ -437,7 +437,7 @@ switch g {
 		return "{{$e.Description}}"
 {{- end}}
 	default:
-		panic("Could not map enum description")
+		return ""
 	}
 }
 
