@@ -2,8 +2,6 @@
 
 **I don't recommend using this in production, but rather as an example of how one could go about using AST to generate code.**
 
-[![Build Status](https://travis-ci.org/steinfletcher/gonum.svg?branch=master)](https://travis-ci.org/steinfletcher/gonum)
-
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
 * Reference and compare enums using values
