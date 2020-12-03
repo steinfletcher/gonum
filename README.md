@@ -1,6 +1,6 @@
 # gonum
 
-**I don't recommend using this in production, but rather as an example of how one could go about using AST to generate code.**
+**I don't recommend using this in production, but rather as an example of how one could go about using AST to generate code. I am not planning to maintain this or add any new features.**
 
 `gonum` is an enum generator for Go. It is inspired by the powerful enum types found in Java. `gonum` has the following capabilities
 
